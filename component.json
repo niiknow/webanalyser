@@ -1,0 +1,28 @@
+{
+  "name": "webanalyser",
+  "main": "index.js",
+  "repo": "niiknow/webanalyser",
+  "description": "Web page analyser.",
+  "version": "1.0.0",
+  "keywords": [
+    "analytic",
+    "web"
+  ],
+  "dependencies": {
+    "component/url": "*",
+    "component/each": "*",
+    "segmentio/canonical": "0.0.1"
+  },
+  "development": {
+    "yields/coverage": "*",
+    "component/jquery": "*",
+    "component/assert": "*",
+    "ianstormtaylor/trigger-event": "*",
+    "jkroso/equals": "*",
+    "segmentio/protocol": "*",
+    "ianstormtaylor/sinon": "duo",
+    "segmentio/when": "*",
+    "timoxley/next-tick": "*",
+    "yields/gravy": "*"
+  }
+}
