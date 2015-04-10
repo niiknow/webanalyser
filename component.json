@@ -19,9 +19,7 @@
     "component/assert": "*",
     "ianstormtaylor/trigger-event": "*",
     "jkroso/equals": "*",
-    "segmentio/protocol": "*",
     "ianstormtaylor/sinon": "duo",
-    "segmentio/when": "*",
     "timoxley/next-tick": "*",
     "yields/gravy": "*"
   }

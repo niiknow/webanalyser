@@ -1,5 +1,5 @@
 {
-  "name": "webanalyser.js",
+  "name": "index.js",
   "author": "tom nguyen <tom@noogen.net>",
   "version": "1.0.0",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "web"
   ],
   "repository": "git://github.com/niiknow/webanalyser.git",
-  "main": "webanalyser.js",
+  "main": "index.js",
   "dependencies": {},
   "devDependencies": {
     "component-coffee": "*",
