@@ -3,7 +3,7 @@
   
   canonical = require('canonical')
   url = require('url')
-  each = require('each')
+  domevent = require('domevent')
 
   $startTime = new Date().getTime()
   $endTime = new Date().getTime()
@@ -71,28 +71,13 @@
       if (@isReady)
         f()
       else
-        $onLoadHandlers.push(f)
+        domevent.ready f
 
   result = new webanalyser()
     
-  onComplete = ->
+  domevent.ready ->
     $endTime = new Date().getTime()
     result.isReady = true
-    each($onLoadHandlers, (f, i) ->
-      f()
-    )
-    return
-
-  onLoadDetect = ->
-    if document.readyState == 'complete'
-      onComplete()
-      return
-
-    if $timeoutId then clearTimeout($timeoutId)
-
-    return $timeoutId = setTimeout(onLoadDetect, 11)
-
-  onLoadDetect()
 
   module.exports = result
 
