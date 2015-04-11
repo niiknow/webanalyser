@@ -2,7 +2,7 @@
   'use strict'
   defaults = require('defaults')
   domevent = require('domevent')
-  FlasthDetect = require('FlasthDetect')
+  flashdetect = require('flashdetect')
 
   $startTime = new Date().getTime()
   $endTime = new Date().getTime()
@@ -46,7 +46,7 @@
       dt: document.title
       z: new Date().getTime()
       clt: $endTime - $startTime
-    fd = new FlasthDetect()
+    fd = new flashdetect()
     if fd.installed
       rst.fl = "#{fd.major} #{fd.minor} r#{fd.revision}"
 
