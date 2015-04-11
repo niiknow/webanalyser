@@ -10,8 +10,7 @@
   ],
   "dependencies": {
     "avetisk/defaults": "0.0.4",
-    "niiknow/flashdetect": "*",
-    "niiknow/domevent": "*"
+    "niiknow/flashdetect": "*"
   },
   "development": {
     "yields/coverage": "*",

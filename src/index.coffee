@@ -1,7 +1,6 @@
 ((document, navigator, screen, location) ->
   'use strict'
   defaults = require('defaults')
-  domevent = require('domevent')
   flashdetect = require('flashdetect')
 
   $startTime = new Date().getTime()
@@ -39,20 +38,8 @@
 
         $defaults = defaults(rst, $defaults)
       return $defaults
-    isReady: false
-    ready: (f) ->
-      if (@isReady)
-        f()
-      else
-        domevent.ready f
 
   result = new webanalyser()
-
-  # document ready
-  domevent.ready ->
-    $endTime = new Date().getTime()
-    $defaults.clt = $endTime - $startTime
-    result.isReady = true
 
   module.exports = result
 
