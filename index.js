@@ -94,15 +94,21 @@
 (function() {
   (function(document, navigator, screen, location) {
     'use strict';
-    var $endTime, $onLoadHandlers, $startTime, $timeoutId, FlasthDetect, domevent, fd, result, url, webanalyser;
-    url = require('url');
+    var $defaults, $endTime, $onLoadHandlers, $startTime, $timeoutId, FlasthDetect, defaults, domevent, result, webanalyser;
+    defaults = require('defaults');
     domevent = require('domevent');
     FlasthDetect = require('FlasthDetect');
     $startTime = new Date().getTime();
     $endTime = new Date().getTime();
     $timeoutId = null;
     $onLoadHandlers = [];
-    fd = new FlasthDetect();
+    $defaults = {
+      sr: screen.width + "x" + screen.height,
+      vp: screen.availWidth + "x" + screen.availHeight,
+      sd: screen.colorDepth,
+      je: navigator.javaEnabled ? navigator.javaEnabled() : false,
+      ul: navigator.languages ? navigator.languages[0] : navigator.language || navigator.userLanguage || navigator.browserLanguage
+    };
 
     /**
      * webanalyser
@@ -111,26 +117,7 @@
       function webanalyser() {}
 
       webanalyser.prototype.getResult = function() {
-        var rst;
-        rst = {
-          sr: screen.width + "x" + screen.height,
-          vp: screen.availWidth + "x" + screen.availHeight,
-          sd: screen.colorDepth,
-          je: navigator.javaEnabled ? navigator.javaEnabled() : false,
-          ul: navigator.languages ? navigator.languages[0] : navigator.language || navigator.userLanguage || navigator.browserLanguage,
-          ds: "web",
-          dr: document.referrer,
-          dl: location.href,
-          dh: location.hostname,
-          dp: location.pathname,
-          dt: document.title,
-          z: new Date().getTime(),
-          clt: $endTime - $startTime
-        };
-        if (fd.installed) {
-          rst.fl = fd.major + " " + fd.minor + " r" + fd.revision;
-        }
-        return rst;
+        return $defaults;
       };
 
       webanalyser.prototype.isReady = false;
@@ -148,98 +135,57 @@
     })();
     result = new webanalyser();
     domevent.ready(function() {
+      var fd, rst;
+      result.isReady = true;
       $endTime = new Date().getTime();
-      return result.isReady = true;
+      rst = {
+        dr: document.referrer,
+        dl: location.href,
+        dh: location.hostname,
+        dp: location.pathname,
+        dt: document.title,
+        z: new Date().getTime(),
+        clt: $endTime - $startTime
+      };
+      fd = new FlasthDetect();
+      if (fd.installed) {
+        rst.fl = fd.major + " " + fd.minor + " r" + fd.revision;
+      }
+      return $defaults = defaults(rst, $defaults);
     });
     return module.exports = result;
   })(document, navigator, screen, location);
 
 }).call(this);
 
-}, {"url":2,"domevent":3}],
+}, {"defaults":2,"domevent":3}],
 2: [function(require, module, exports) {
+'use strict';
 
 /**
- * Parse the given `url`.
+ * Merge default values.
  *
- * @param {String} str
+ * @param {Object} dest
+ * @param {Object} defaults
  * @return {Object}
  * @api public
  */
-
-exports.parse = function(url){
-  var a = document.createElement('a');
-  a.href = url;
-  return {
-    href: a.href,
-    host: a.host || location.host,
-    port: ('0' === a.port || '' === a.port) ? port(a.protocol) : a.port,
-    hash: a.hash,
-    hostname: a.hostname || location.hostname,
-    pathname: a.pathname.charAt(0) != '/' ? '/' + a.pathname : a.pathname,
-    protocol: !a.protocol || ':' == a.protocol ? location.protocol : a.protocol,
-    search: a.search,
-    query: a.search.slice(1)
-  };
-};
-
-/**
- * Check if `url` is absolute.
- *
- * @param {String} url
- * @return {Boolean}
- * @api public
- */
-
-exports.isAbsolute = function(url){
-  return 0 == url.indexOf('//') || !!~url.indexOf('://');
-};
-
-/**
- * Check if `url` is relative.
- *
- * @param {String} url
- * @return {Boolean}
- * @api public
- */
-
-exports.isRelative = function(url){
-  return !exports.isAbsolute(url);
-};
-
-/**
- * Check if `url` is cross domain.
- *
- * @param {String} url
- * @return {Boolean}
- * @api public
- */
-
-exports.isCrossDomain = function(url){
-  url = exports.parse(url);
-  var location = exports.parse(window.location.href);
-  return url.hostname !== location.hostname
-    || url.port !== location.port
-    || url.protocol !== location.protocol;
-};
-
-/**
- * Return default port for `protocol`.
- *
- * @param  {String} protocol
- * @return {String}
- * @api private
- */
-function port (protocol){
-  switch (protocol) {
-    case 'http:':
-      return 80;
-    case 'https:':
-      return 443;
-    default:
-      return location.port;
+var defaults = function (dest, src, recursive) {
+  for (var prop in src) {
+    if (recursive && dest[prop] instanceof Object && src[prop] instanceof Object) {
+      dest[prop] = defaults(dest[prop], src[prop], true);
+    } else if (! (prop in dest)) {
+      dest[prop] = src[prop];
+    }
   }
-}
+
+  return dest;
+};
+
+/**
+ * Expose `defaults`.
+ */
+module.exports = defaults;
 
 }, {}],
 3: [function(require, module, exports) {
