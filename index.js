@@ -135,7 +135,7 @@
     })();
     result = new webanalyser();
     domevent.ready(function() {
-      var fd, rst;
+      var rst;
       result.isReady = true;
       $endTime = new Date().getTime();
       rst = {
@@ -147,9 +147,8 @@
         z: new Date().getTime(),
         clt: $endTime - $startTime
       };
-      fd = new flashdetect();
-      if (fd.installed) {
-        rst.fl = fd.major + " " + fd.minor + " r" + fd.revision;
+      if (flashdetect.installed) {
+        rst.fl = flashdetect.major + " " + flashdetect.minor + " r" + flashdetect.revisionStr;
       }
       return $defaults = defaults(rst, $defaults);
     });

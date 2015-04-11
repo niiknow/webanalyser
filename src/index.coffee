@@ -46,9 +46,9 @@
       dt: document.title
       z: new Date().getTime()
       clt: $endTime - $startTime
-    fd = new flashdetect()
-    if fd.installed
-      rst.fl = "#{fd.major} #{fd.minor} r#{fd.revision}"
+      
+    if flashdetect.installed
+      rst.fl = "#{flashdetect.major} #{flashdetect.minor} r#{flashdetect.revisionStr}"
 
     $defaults = defaults(rst, $defaults)
 
