@@ -24,6 +24,19 @@
   ###
   class webanalyser
     getResult: ->
+      if (!defaults.dl?)
+        rst = 
+          dr: document.referrer
+          dl: location.href
+          dh: location.hostname
+          dp: location.pathname
+          dt: document.title
+          z: new Date().getTime()
+          
+        if flashdetect.installed
+          rst.fl = "#{flashdetect.major} #{flashdetect.minor} r#{flashdetect.revisionStr}"
+
+        $defaults = defaults(rst, $defaults)
       return $defaults
     isReady: false
     ready: (f) ->
@@ -36,21 +49,9 @@
 
   # document ready
   domevent.ready ->
-    result.isReady = true
     $endTime = new Date().getTime()
-    rst = 
-      dr: document.referrer
-      dl: location.href
-      dh: location.hostname
-      dp: location.pathname
-      dt: document.title
-      z: new Date().getTime()
-      clt: $endTime - $startTime
-      
-    if flashdetect.installed
-      rst.fl = "#{flashdetect.major} #{flashdetect.minor} r#{flashdetect.revisionStr}"
-
-    $defaults = defaults(rst, $defaults)
+    $defaults.clt = $endTime - $startTime
+    result.isReady = true
 
   module.exports = result
 

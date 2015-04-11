@@ -117,6 +117,21 @@
       function webanalyser() {}
 
       webanalyser.prototype.getResult = function() {
+        var rst;
+        if (defaults.dl == null) {
+          rst = {
+            dr: document.referrer,
+            dl: location.href,
+            dh: location.hostname,
+            dp: location.pathname,
+            dt: document.title,
+            z: new Date().getTime()
+          };
+          if (flashdetect.installed) {
+            rst.fl = flashdetect.major + " " + flashdetect.minor + " r" + flashdetect.revisionStr;
+          }
+          $defaults = defaults(rst, $defaults);
+        }
         return $defaults;
       };
 
@@ -135,22 +150,9 @@
     })();
     result = new webanalyser();
     domevent.ready(function() {
-      var rst;
-      result.isReady = true;
       $endTime = new Date().getTime();
-      rst = {
-        dr: document.referrer,
-        dl: location.href,
-        dh: location.hostname,
-        dp: location.pathname,
-        dt: document.title,
-        z: new Date().getTime(),
-        clt: $endTime - $startTime
-      };
-      if (flashdetect.installed) {
-        rst.fl = flashdetect.major + " " + flashdetect.minor + " r" + flashdetect.revisionStr;
-      }
-      return $defaults = defaults(rst, $defaults);
+      $defaults.clt = $endTime - $startTime;
+      return result.isReady = true;
     });
     return module.exports = result;
   })(document, navigator, screen, location);
