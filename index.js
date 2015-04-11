@@ -123,12 +123,11 @@
             dr: document.referrer,
             dl: location.href,
             dh: location.hostname,
-            dp: location.pathname,
             dt: document.title,
             z: new Date().getTime()
           };
           if (flashdetect.installed) {
-            rst.fl = flashdetect.major + " " + flashdetect.minor + " r" + flashdetect.revisionStr;
+            rst.fl = flashdetect.major + " " + flashdetect.minor + " " + "{flashdetect.revisionStr}";
           }
           $defaults = defaults(rst, $defaults);
         }
