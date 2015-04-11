@@ -11,6 +11,7 @@
   "dependencies": {
     "component/url": "*",
     "niiknow/domevent": "*",
+    "tchakabam/FlashDetect": "*",
     "segmentio/canonical": "0.0.1"
   },
   "development": {

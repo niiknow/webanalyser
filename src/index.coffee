@@ -1,46 +1,19 @@
 ((document, navigator, screen, location) ->
   'use strict'
   
-  canonical = require('canonical')
   url = require('url')
   domevent = require('domevent')
+  FlasthDetect = require('FlasthDetect')
 
   $startTime = new Date().getTime()
   $endTime = new Date().getTime()
   $timeoutId = null
   $onLoadHandlers = []
+  fd = new FlasthDetect()
 
   ###*
-  # Return the canonical path for the page.
-  #
-  # @return {String}
+  # webanalyser
   ###
-
-  canonicalPath = ->
-    canon = canonical()
-    if !canon
-      return location.pathname
-    parsed = url.parse(canon)
-    parsed.pathname
-
-  ###*
-  # Return the canonical URL for the page concat the given `search`
-  # and strip the hash.
-  #
-  # @param {String} search
-  # @return {String}
-  ###
-
-  canonicalUrl = (search) ->
-    canon = canonical()
-    if canon
-      return if ~canon.indexOf('?') then canon else canon + search
-    url = location.href
-    i = url.indexOf('#')
-    if -1 == i then url else url.slice(0, i)
-
-
-
   class webanalyser
     getResult: ->
       # https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
@@ -56,15 +29,15 @@
         ds: "web"
         dr: document.referrer
 
-        dl: canonicalUrl(location.search)
+        dl: location.href
         dh: location.hostname
-        dp: canonicalPath()
+        dp: location.pathname
         dt: document.title
         z: new Date().getTime()
         clt: $endTime - $startTime
 
-      #if fd.installed
-        #rst.fl = "#{fd.major} #{fd.minor} r#{fd.revision}"
+      if fd.installed
+        rst.fl = "#{fd.major} #{fd.minor} r#{fd.revision}"
       return rst
     isReady: false
     ready: (f) ->
@@ -74,7 +47,8 @@
         domevent.ready f
 
   result = new webanalyser()
-    
+
+  # document ready
   domevent.ready ->
     $endTime = new Date().getTime()
     result.isReady = true

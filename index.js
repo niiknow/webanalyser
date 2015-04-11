@@ -94,55 +94,19 @@
 (function() {
   (function(document, navigator, screen, location) {
     'use strict';
-    var $endTime, $onLoadHandlers, $startTime, $timeoutId, canonical, canonicalPath, canonicalUrl, domevent, result, url, webanalyser;
-    canonical = require('canonical');
+    var $endTime, $onLoadHandlers, $startTime, $timeoutId, FlasthDetect, domevent, fd, result, url, webanalyser;
     url = require('url');
     domevent = require('domevent');
+    FlasthDetect = require('FlasthDetect');
     $startTime = new Date().getTime();
     $endTime = new Date().getTime();
     $timeoutId = null;
     $onLoadHandlers = [];
+    fd = new FlasthDetect();
 
     /**
-     * Return the canonical path for the page.
-    #
-     * @return {String}
+     * webanalyser
      */
-    canonicalPath = function() {
-      var canon, parsed;
-      canon = canonical();
-      if (!canon) {
-        return location.pathname;
-      }
-      parsed = url.parse(canon);
-      return parsed.pathname;
-    };
-
-    /**
-     * Return the canonical URL for the page concat the given `search`
-     * and strip the hash.
-    #
-     * @param {String} search
-     * @return {String}
-     */
-    canonicalUrl = function(search) {
-      var canon, i;
-      canon = canonical();
-      if (canon) {
-        if (~canon.indexOf('?')) {
-          return canon;
-        } else {
-          return canon + search;
-        }
-      }
-      url = location.href;
-      i = url.indexOf('#');
-      if (-1 === i) {
-        return url;
-      } else {
-        return url.slice(0, i);
-      }
-    };
     webanalyser = (function() {
       function webanalyser() {}
 
@@ -156,13 +120,16 @@
           ul: navigator.languages ? navigator.languages[0] : navigator.language || navigator.userLanguage || navigator.browserLanguage,
           ds: "web",
           dr: document.referrer,
-          dl: canonicalUrl(location.search),
+          dl: location.href,
           dh: location.hostname,
-          dp: canonicalPath(),
+          dp: location.pathname,
           dt: document.title,
           z: new Date().getTime(),
           clt: $endTime - $startTime
         };
+        if (fd.installed) {
+          rst.fl = fd.major + " " + fd.minor + " r" + fd.revision;
+        }
         return rst;
       };
 
@@ -189,16 +156,8 @@
 
 }).call(this);
 
-}, {"canonical":2,"url":3,"domevent":4}],
+}, {"url":2,"domevent":3}],
 2: [function(require, module, exports) {
-module.exports = function canonical () {
-  var tags = document.getElementsByTagName('link');
-  for (var i = 0, tag; tag = tags[i]; i++) {
-    if ('canonical' == tag.getAttribute('rel')) return tag.getAttribute('href');
-  }
-};
-}, {}],
-3: [function(require, module, exports) {
 
 /**
  * Parse the given `url`.
@@ -283,7 +242,7 @@ function port (protocol){
 }
 
 }, {}],
-4: [function(require, module, exports) {
+3: [function(require, module, exports) {
 myObj = null
 mydefine = function(h, F){
 	myObj = F().$;
