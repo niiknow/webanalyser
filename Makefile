@@ -13,12 +13,13 @@ BINS = node_modules/.bin
 BUILD = build.js
 DUO = $(BINS)/duo
 DUOT = $(BINS)/duo-test -p test/server -R spec -P $(PORT) -c "make build.js"
+COFFEE = bin/coffee --js --bare
 
 #
 # Default target.
 #
 
-default: test
+default: lib/index.js
 
 #
 # Clean.
@@ -27,6 +28,7 @@ default: test
 clean:
 	@rm -rf components $(BUILD)
 	@rm -f index.js
+	@rm -rf lib
 	@rm -rf node_modules npm-debug.log
 #
 # Test with phantomjs.
@@ -64,11 +66,11 @@ test-browser: $(BUILD)
 .PHONY: test-sauce
 
 #
-# Target for `index.js` file.
+# Target for `*.js` file.
 #
 
-index.js: node_modules $(SRC)
-	@$(DUO) --standalone webanalyser --use duo-coffee src/index.coffee > index.js
+lib/%.js: node_modules $(SRC)
+	node_modules/coffee-script/bin/coffee --bare -c -o $(@D) $(patsubst lib/%,src/%,$(patsubst %.js,%.coffee,$@))
 
 #
 # Target for `node_modules` folder.

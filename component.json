@@ -1,6 +1,6 @@
 {
   "name": "webanalyser",
-  "main": "index.js",
+  "main": "lib/index.js",
   "repo": "niiknow/webanalyser",
   "description": "Web page analyser.",
   "version": "1.0.0",
