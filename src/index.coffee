@@ -3,11 +3,6 @@
   defaults = require('defaults')
   flashdetect = require('flashdetect')
 
-  $startTime = new Date().getTime()
-  $endTime = new Date().getTime()
-  $timeoutId = null
-  $onLoadHandlers = []
-
   # https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
   # use google analytic for basis of all url parameters so we do not start from scratch
   # it is also useful later for any kind of google analytic data aggregation
@@ -23,20 +18,19 @@
   ###
   class webanalyser
     getResult: ->
-      if (!defaults.dl?)
+      if (!defaults.z?)
         rst = 
           dr: document.referrer
-          dl: location.href
           dh: location.hostname
-          # don't need pathname, just use href
-          # dp: location.pathname
-          dt: document.title
           z: new Date().getTime()
           
         if flashdetect.installed
           rst.fl = "#{flashdetect.major} #{flashdetect.minor} #{flashdetect.revisionStr}"
 
         $defaults = defaults(rst, $defaults)
+
+      $defaults.dl = location.href
+      $defaults.dt = document.title
       return $defaults
 
   result = new webanalyser()
