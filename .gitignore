@@ -27,3 +27,5 @@ build/Release
 node_modules
 components
 .DS_Store
+build
+build.js

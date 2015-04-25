@@ -27,16 +27,15 @@ default: lib/index.js
 
 clean:
 	@rm -rf components $(BUILD)
-	@rm -f index.js
-	@rm -rf lib
+	@rm -rf lib build.js
 	@rm -rf node_modules npm-debug.log
 #
 # Test with phantomjs.
 #
 
 test: $(BUILD)
-	@$(DUOT) phantomjs
-
+	$(BINS)/duo-test phantomjs
+	
 #
 # Test with saucelabs
 #
@@ -44,7 +43,7 @@ test: $(BUILD)
 test-sauce: $(BUILD)
 	@$(DUOT) saucelabs \
 		--browsers $(BROWSER) \
-		--title index.js
+		--title webanalyser
 
 #
 # Test in the browser.
@@ -78,12 +77,13 @@ lib/%.js: node_modules $(SRC)
 
 node_modules: package.json
 	@npm install
+	@touch $@
 
 #
 # Target for build files.
 #
 
-$(BUILD): $(TESTS) index.js
+$(BUILD): $(TESTS) lib/index.js
 	@$(DUO) --development test/tests.js > $(BUILD)
 
 #

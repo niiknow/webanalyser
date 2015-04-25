@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <title>webanalyser coverage</title>
+  <script src="mocha.js"></script>
+  <script>mocha.setup({ ui: 'bdd' })</script>
+  <script src="../build/build.js"></script>
+  <script>cov = require('coverage')('webanalyser');</script>
+  <script src="index.js"></script>
+</head>
+<body>
+  <div id='coverage'></div>
+  <div id="mocha" style='display:none;'></div>
+  <script>
+    mocha.run(function(){
+      cov.render();
+    });
+  </script>
+</body>
+</html>
