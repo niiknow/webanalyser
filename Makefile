@@ -20,6 +20,7 @@ COFFEE = bin/coffee --js --bare
 #
 
 default: build
+default: lib/index.js
 
 #
 # Clean.
