@@ -5,7 +5,7 @@
 
 PORT ?= 0
 BROWSER ?= ie:9
-TESTS = $(wildcard test/*.js)
+TESTS = $(wildcard test/*.coffee)
 SRC = $(wildcard src/*.coffee)
 MINIFY = $(BINS)/uglifyjs
 PID = test/server/pid.txt
@@ -19,7 +19,7 @@ COFFEE = bin/coffee --js --bare
 # Default target.
 #
 
-default: lib/index.js
+default: build
 
 #
 # Clean.
@@ -27,7 +27,7 @@ default: lib/index.js
 
 clean:
 	@rm -rf components $(BUILD)
-	@rm -rf lib build.js
+	@rm -rf lib build build.js
 	@rm -rf node_modules npm-debug.log
 #
 # Test with phantomjs.
@@ -35,7 +35,7 @@ clean:
 
 test: $(BUILD)
 	$(BINS)/duo-test phantomjs
-	
+
 #
 # Test with saucelabs
 #
@@ -83,13 +83,13 @@ node_modules: package.json
 # Target for build files.
 #
 
-$(BUILD): $(TESTS) lib/index.js
-	@$(DUO) --development test/tests.js > $(BUILD)
+$(BUILD): node_modules $(TESTS) src/index.coffee
+	@$(DUO) --development --use duo-coffee test/tests.coffee > $(BUILD)
 
 #
 # Phony build target
 #
 
-build: build.js
+build: $(BUILD)
 
 .PHONY: build

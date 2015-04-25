@@ -22,7 +22,7 @@
   # webanalyser
   ###
   class webanalyser
-    getResult: ->
+    get: ->
       if (!$df.z?)
         rst = 
           dr: $doc.referrer
@@ -38,7 +38,7 @@
       $df.dt = $doc.title
       return $df
 
-    getWindowSize: ->
+    windowSize: ->
       rst = { w: 0, h: 0 }
       if typeof $win.innerWidth is 'number'
         # Non-IE
