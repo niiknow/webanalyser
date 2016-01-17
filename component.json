@@ -3,13 +3,13 @@
   "main": "lib/index.js",
   "repo": "niiknow/webanalyser",
   "description": "Web page analyser.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": [
     "analytic",
     "web"
   ],
   "dependencies": {
-    "avetisk/defaults": "0.0.4",
+    "niiknow/defaults": "0.0.4",
     "niiknow/flashdetect": "*"
   },
   "development": {
